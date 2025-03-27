@@ -29,6 +29,6 @@ Route::middleware('auth')->group(function () {
     })->name('home');
 
 });
-Route::get('/search/movie', [SearchController::class, 'search'])->name('search.movie');
+Route::get('/search', [SearchController::class, 'search'])->name('search');
 Route::get('/entertainment', [EntertainmentController::class, 'index'])->name('entertainment.index');
 Route::post('/rate-movie', [RatingController::class, 'store'])->name('rate.movie');
