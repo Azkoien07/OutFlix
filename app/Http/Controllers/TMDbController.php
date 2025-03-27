@@ -9,12 +9,12 @@ class TMDbController extends Controller
 {
     public function searchEntertainment(Request $request)
     {
-        $query = $request->input('query'); // Obtener el nombre ingresado por el usuario
+        $query = $request->input('query');
 
         $baseUrl = env('TMDB_BASE_URL');
         $apiKey = env('TMDB_API_KEY');
 
-        // Consultar la API para buscar series y películas
+        
         $moviesResponse = Http::withoutVerifying()->get("$baseUrl/search/movie", [
             'api_key' => $apiKey,
             'language' => 'es-ES',

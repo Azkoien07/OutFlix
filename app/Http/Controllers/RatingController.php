@@ -14,8 +14,6 @@ class RatingController extends Controller
         $rating = $request->input('rating');
         $comment = $request->input('comment');
 
-        // Aquí podrías guardar la valoración en la base de datos
-        // Por ahora, solo retornamos los datos
         return back()->with('success', '¡Valoración enviada con éxito!');
     }
 }

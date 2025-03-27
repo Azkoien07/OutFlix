@@ -27,6 +27,7 @@
                         <form action="{{ route('rate.movie') }}" method="POST" class="mt-4">
                             @csrf
                             <input type="hidden" name="movie_id" value="{{ $movie['id'] }}">
+
                             <label for="rating_{{ $movie['id'] }}" class="block text-gray-700">Tu valoración:</label>
                             <select name="rating" id="rating_{{ $movie['id'] }}" class="border p-2 rounded-lg w-full">
                                 <option value="1">⭐ 1 - Muy Mala</option>
@@ -34,6 +35,25 @@
                                 <option value="3">⭐⭐⭐ 3 - Regular</option>
                                 <option value="4">⭐⭐⭐⭐ 4 - Buena</option>
                                 <option value="5">⭐⭐⭐⭐⭐ 5 - Excelente</option>
+                            </select>
+
+                            <label for="category_{{ $movie['id'] }}" class="block text-gray-700 mt-2">Categoría:</label>
+                            <select name="category" id="category_{{ $movie['id'] }}" class="border p-2 rounded-lg w-full">
+                                <option value="accion">Acción</option>
+                                <option value="aventura">Aventura</option>
+                                <option value="comedia">Comedia</option>
+                                <option value="drama">Drama</option>
+                                <option value="terror">Terror</option>
+                                <option value="ciencia_ficcion">Ciencia Ficción</option>
+                                <option value="fantasia">Fantasía</option>
+                                <option value="documental">Documental</option>
+                            </select>
+
+                            <label for="status_{{ $movie['id'] }}" class="block text-gray-700 mt-2">Estado de visualización:</label>
+                            <select name="status" id="status_{{ $movie['id'] }}" class="border p-2 rounded-lg w-full">
+                                <option value="pendiente">📌 Pendiente</option>
+                                <option value="viendo">▶️ Viendo</option>
+                                <option value="terminado">✅ Terminado</option>
                             </select>
 
                             <label for="comment_{{ $movie['id'] }}" class="block text-gray-700 mt-2">Comentario:</label>

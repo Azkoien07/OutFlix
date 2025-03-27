@@ -11,7 +11,6 @@ class SearchController extends Controller
     {
         $query = trim($request->input('query'));
 
-        // Si el usuario no ingresó nada, devolver la vista sin resultados
         if (empty($query)) {
             return view('entertainment.index', [
                 'movies' => [],
@@ -29,9 +28,6 @@ class SearchController extends Controller
                 'language' => 'es-ES',
                 'include_adult' => false
             ]);
-
-            // Depurar la respuesta antes de continuar
-            dd($response->json());
 
             $results = $response->json()['results'] ?? [];
 

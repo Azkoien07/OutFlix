@@ -9,15 +9,11 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\RatingController;
 
 
-/*
-|--------------------------------------------------------------------------
-| Rutas de Autenticación
-|--------------------------------------------------------------------------
-*/
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
+//Rutas para el login
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 
