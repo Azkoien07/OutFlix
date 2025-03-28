@@ -31,5 +31,7 @@ Route::middleware('auth')->group(function () {
 });
 // Rutas para realizar busquedas
 Route::get('/search', [SearchController::class, 'search'])->name('search');
-Route::get('/entertainment', [EntertainmentController::class, 'index'])->name('entertainment.index');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/entertainment', [EntertainmentController::class, 'index'])->name('entertainment.index');
+});
 Route::post('/rate-movie', [RatingController::class, 'store'])->name('rate.movie');
