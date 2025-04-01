@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto p-6" x-data="{ activeCardId: null }">
+<div class="container mx-auto p-4 md:p-6" x-data="{ activeCardId: null }">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Buscar Películas</h1>
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Buscar Películas</h1>
     </div>
 
     <!-- Formulario de búsqueda -->
-    <form action="{{ route('search') }}" method="GET" class="mb-6 flex items-center gap-4 w-full max-w-5xl mx-auto">
+    <form action="{{ route('search') }}" method="GET" class="mb-6 flex items-center gap-2 md:gap-4 w-full max-w-5xl mx-auto">
         <input type="text" name="query" value="{{ $searchTerm ?? '' }}"
             placeholder="Buscar películas..."
-            class="flex-grow border border-gray-300 p-3 rounded-lg focus:ring focus:ring-blue-300 text-lg">
-        <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 text-lg">
+            class="flex-grow border border-gray-300 p-2 md:p-3 rounded-lg focus:ring focus:ring-blue-300 text-base md:text-lg">
+        <button type="submit" class="bg-blue-600 text-white px-4 md:px-8 py-2 md:py-3 rounded-lg hover:bg-blue-700 text-base md:text-lg whitespace-nowrap">
             Buscar
         </button>
     </form>
@@ -23,24 +23,24 @@
     @endisset
 
     @if(($searchPerformed ?? false) && count($results ?? []) > 0)
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         @php
-            $categories = ['Acción', 'Aventura', 'Drama', 'Comedia', 'Terror', 'Ciencia Ficción'];
-            $statuses = ['Pendiente', 'Viendo', 'Vista'];
+        $categories = ['Acción', 'Aventura', 'Drama', 'Comedia', 'Terror', 'Ciencia Ficción'];
+        $statuses = ['Pendiente', 'Viendo', 'Vista'];
         @endphp
 
         @foreach($results as $movie)
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer border"
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer border h-full flex flex-col"
             @click="activeCardId = activeCardId === {{ $movie['id'] }} ? null : {{ $movie['id'] }}">
-            
-            <div class="relative w-full h-80">
-                <img src="{{ $movie['poster_path'] }}" 
-                     alt="{{ $movie['title'] }}"
-                     class="absolute w-full h-full object-cover"
-                     loading="lazy">
+
+            <div class="relative w-full h-64 md:h-80">
+                <img src="{{ $movie['poster_path'] }}"
+                    alt="{{ $movie['title'] }}"
+                    class="absolute w-full h-full object-cover"
+                    loading="lazy">
             </div>
 
-            <div class="p-4">
+            <div class="p-4 flex-grow">
                 <h3 class="font-bold text-lg mb-1 truncate text-gray-800">{{ $movie['title'] }}</h3>
                 <p class="text-gray-500 text-sm mb-2">
                     {{ \Carbon\Carbon::parse($movie['release_date'])->format('Y') }}
@@ -52,30 +52,33 @@
             </div>
 
             <!-- Contenido Expandido -->
-            <div 
-                x-show="activeCardId === {{ $movie['id'] }}" 
-                x-collapse 
-                class="p-4 border-t bg-gray-50">
-                <h4 class="font-semibold mb-2 text-gray-800">Clasificación por categorías:</h4>
-                <select class="w-full border border-gray-300 rounded p-2 bg-white" @click.stop>
-                    @foreach($categories as $category)
+            <div x-show="activeCardId === {{ $movie['id'] }}" x-collapse class="p-4 border-t bg-gray-50 w-full">
+                <form method="POST" action="{{ route('movie.save') }}" @click.stop>
+                    @csrf
+                    <input type="hidden" name="movie_id" value="{{ $movie['id'] }}">
+                    <input type="hidden" name="movie_title" value="{{ $movie['title'] }}">
+
+                    <h4 class="font-semibold mb-2 text-gray-800">Clasificación por categorías:</h4>
+                    <select name="categoria" class="w-full border border-gray-300 rounded p-2 bg-white" @click.stop>
+                        @foreach($categories as $category)
                         <option value="{{ $category }}">{{ $category }}</option>
-                    @endforeach
-                </select>
+                        @endforeach
+                    </select>
 
-                <h4 class="font-semibold mt-4 mb-2 text-gray-800">Estado de visualización:</h4>
-                <select class="w-full border border-gray-300 rounded p-2 bg-white" @click.stop>
-                    @foreach($statuses as $status)
+                    <h4 class="font-semibold mt-4 mb-2 text-gray-800">Estado de visualización:</h4>
+                    <select name="estado_visto" class="w-full border border-gray-300 rounded p-2 bg-white" @click.stop>
+                        @foreach($statuses as $status)
                         <option value="{{ $status }}">{{ $status }}</option>
-                    @endforeach
-                </select>
+                        @endforeach
+                    </select>
 
-                <h4 class="font-semibold mt-4 mb-2 text-gray-800">Valoraciones y comentarios:</h4>
-                <textarea class="w-full border border-gray-300 rounded p-2 bg-white" placeholder="Escribe tu opinión..." @click.stop></textarea>
+                    <h4 class="font-semibold mt-4 mb-2 text-gray-800">Valoraciones y comentarios:</h4>
+                    <textarea name="comentario" class="w-full border border-gray-300 rounded p-2 bg-white" placeholder="Escribe tu opinión..." @click.stop></textarea>
 
-                <button class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 mt-2 transition" @click.stop>
-                    Guardar Valoración
-                </button>
+                    <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 mt-2 transition" @click.stop>
+                        Guardar Valoración
+                    </button>
+                </form>
             </div>
         </div>
         @endforeach
