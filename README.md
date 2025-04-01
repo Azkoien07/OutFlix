@@ -43,11 +43,11 @@ php artisan key:generate
 ```
 
 ### 5. Ejecutar las migraciones
-Esto ejecutará las siguientes migraciones:
+Esto ejecutará las siguientes migraciones en orden:
 - `2025_03_18_012553_create_usuarios_table.php`
-- `2025_03_18_012632_create_series_peliculas_table.php`
 - `2025_03_18_012638_create_categorias_table.php`
 - `2025_03_18_012642_create_estado_visto_table.php`
+- `2025_03_18_012632_create_series_peliculas_table.php`
 
 ```bash
 php artisan migrate
